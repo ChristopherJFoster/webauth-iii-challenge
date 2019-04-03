@@ -22,7 +22,7 @@ const registerUser = async user => {
   });
 };
 
-const getUser = username => {
+const getUserForLogin = username => {
   return db('users')
     .where({ username })
     .first();
@@ -31,5 +31,5 @@ const getUser = username => {
 module.exports = {
   checkUsername,
   registerUser,
-  getUser
+  getUserForLogin
 };

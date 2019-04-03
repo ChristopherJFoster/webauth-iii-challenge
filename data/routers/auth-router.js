@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 
+const generateToken = require('../../utilities/generate-token');
 const Auth = require('../models/auth-model');
 
 router.post('/register', async (req, res) => {
@@ -52,11 +53,12 @@ router.post('/login', async (req, res) => {
     });
   } else {
     try {
-      const user = await Auth.getUser(username.toLowerCase());
+      const user = await Auth.getUserForLogin(username.toLowerCase());
       if (user && bcrypt.compareSync(password, user.password)) {
-        req.session.user = user;
+        const token = generateToken(user);
         res.status(200).json({
-          message: `Welcome ${user.username}!`
+          message: `Welcome ${user.username}!`,
+          token
         });
       } else {
         res.status(401).json({
@@ -72,21 +74,21 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.get('/logout', (req, res) => {
-  if (req.session.user) {
-    const username = req.session.user.username;
-    req.session.destroy(err => {
-      if (err) {
-        res
-          .status(500)
-          .json({ error: 'There was an error while logging out the user.' });
-      } else {
-        res.status(200).json({ message: `See you next time, ${username}!` });
-      }
-    });
-  } else {
-    res.status(400).json({ message: 'No one was logged in.' });
-  }
-});
+// router.get('/logout', (req, res) => {
+//   if (req.session.user) {
+//     const username = req.session.user.username;
+//     req.session.destroy(err => {
+//       if (err) {
+//         res
+//           .status(500)
+//           .json({ error: 'There was an error while logging out the user.' });
+//       } else {
+//         res.status(200).json({ message: `See you next time, ${username}!` });
+//       }
+//     });
+//   } else {
+//     res.status(400).json({ message: 'No one was logged in.' });
+//   }
+// });
 
 module.exports = router;
