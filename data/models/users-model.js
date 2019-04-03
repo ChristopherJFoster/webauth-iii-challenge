@@ -1,7 +1,7 @@
 const db = require('../../utilities/dbConfig');
 
-const getUsers = () => {
-  return db('users');
+const getUsers = department => {
+  return db('users').where({ department });
 };
 
 module.exports = {
