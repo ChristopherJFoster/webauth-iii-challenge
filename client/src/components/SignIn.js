@@ -10,18 +10,15 @@ const SignIn = ({ history }) => {
   const signIn = async e => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        'http://localhost:5000/api/auth/login',
-        {
-          username: usernameSignIn.value,
-          password: passwordSignIn.value
-        }
-      );
+      const response = await axios.post('auth/login', {
+        username: usernameSignIn.value,
+        password: passwordSignIn.value
+      });
       localStorage.setItem('token', response.data.token);
       console.log(response.data.message);
       usernameSignIn.setValue('');
       passwordSignIn.setValue('');
-      history.push('/');
+      history.push('/users');
     } catch (err) {
       console.log(err);
     }

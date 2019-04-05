@@ -6,17 +6,21 @@ import { useInput } from '../utilities/useInput';
 const SignUp = ({ history }) => {
   const usernameSignUp = useInput();
   const passwordSignUp = useInput();
+  const departmentSignUp = useInput();
 
   const signUp = async e => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/auth/signup', {
+      const response = await axios.post('auth/register', {
         username: usernameSignUp.value,
-        password: passwordSignUp.value
+        password: passwordSignUp.value,
+        department: departmentSignUp.value
       });
+      console.log(response.data.message);
       usernameSignUp.setValue('');
       passwordSignUp.setValue('');
-      history.push('/');
+      departmentSignUp.setValue('');
+      history.push('/users');
     } catch (err) {
       console.log(err);
     }
@@ -33,6 +37,14 @@ const SignUp = ({ history }) => {
           name='usernameSignUp'
           onChange={usernameSignUp.updateValue}
           placeholder='username'
+        />
+        <input
+          required
+          type='text'
+          value={departmentSignUp.value}
+          name='departmentSignUp'
+          onChange={departmentSignUp.updateValue}
+          placeholder='department'
         />
         <input
           required

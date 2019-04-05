@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+import requiresAuth from '../utilities/requiresAuth';
 import User from './User';
 
-const Users = ({ history }) => {
+const Users = () => {
   const [users, setUsers] = useState([]);
   useEffect(() => {
-    const fetchData = async () => {
+    const getData = async () => {
       try {
-        const fetchUsers = await axios.get('http://localhost:5000/api/users');
-        setUsers(fetchUsers);
+        const users = await axios.get('users');
+        setUsers(users.data);
       } catch (err) {
         console.log(err);
       }
     };
-    fetchData();
+    getData();
   }, []);
 
   return (
@@ -31,4 +32,4 @@ const Users = ({ history }) => {
   );
 };
 
-export default Users;
+export default requiresAuth(Users);
