@@ -1,14 +1,15 @@
 import React from 'react';
-import { Route, NavLink } from 'react-router-dom';
+import { Route, NavLink, withRouter } from 'react-router-dom';
 
 import Home from './Home';
 import SignUp from './SignUp';
 import SignIn from './SignIn';
 import Users from './Users';
 
-const App = () => {
+const App = ({ history }) => {
   const signOut = () => {
     localStorage.removeItem('token');
+    history.push('/signin');
   };
 
   return (
@@ -34,4 +35,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default withRouter(App);
